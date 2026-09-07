@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">School Schedule Pro</string>
+    
+    <!-- Дни недели -->
+    <string name="monday">ПН</string>
+    <string name="tuesday">ВТ</string>
+    <string name="wednesday">СР</string>
+    <string name="thursday">ЧТ</string>
+    <string name="friday">ПТ</string>
+    <string name="saturday">СБ</string>
+    <string name="sunday">ВС</string>
+    
+    <!-- Экраны -->
+    <string name="screen_schedule">Расписание</string>
+    <string name="screen_homework">ДЗ</string>
+    <string name="screen_vk_photos">VK Фото</string>
+    
+    <!-- Общие -->
+    <string name="numerator">Числитель</string>
+    <string name="denominator">Знаменатель</string>
+    <string name="no_pair">(нет пары)</string>
+    <string name="add_pair">➕ Добавить</string>
+    <string name="homework">ДЗ</string>
+    <string name="today">Сегодня</string>
+    <string name="export">Экспорт</string>
+    <string name="refresh">Обновить</string>
+    <string name="clear_cache">Очистить кэш</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+    <string name="edit">Редактировать</string>
+    <string name="delete">Удалить</string>
+    
+    <!-- Сообщения -->
+    <string name="no_homework_today">На сегодня ничего не задано</string>
+    <string name="no_homework">Домашних заданий нет</string>
+    <string name="no_photos">Фото не найдены. Попробуйте обновить</string>
+    <string name="pdf_import_success">Расписание обновлено!</string>
+    <string name="pdf_import_error">Ошибка парсинга PDF</string>
+    <string name="welcome_message">Загрузите PDF с расписанием или добавьте пары вручную</string>
+</resources>
