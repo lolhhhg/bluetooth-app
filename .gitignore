@@ -2,20 +2,24 @@
 # Build artifacts
 build/
 dist/
-*.exe
 *.spec
+*.pkg
+*.toc
+*.pyz
+*.pyc
+localpycs/
+warn-*.txt
+xref-*.html
+base_library.zip
 
-# Dependencies
-venv/
-.venv/
+# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Logs and temp files
+# Logs
 *.log
-*.tmp
 
 # Environment
 .env
@@ -25,8 +29,11 @@ __pycache__/
 # Editors
 .vscode/
 .idea/
+*.swp
+*.swo
+*.tmp
 
-# OS generated files
+# OS
 .DS_Store
 Thumbs.db
 ```
