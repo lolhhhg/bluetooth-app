@@ -12,6 +12,14 @@ from datetime import datetime
 from typing import Optional, List, Dict, Any
 
 try:
+    import tkinter as tk
+    from tkinter import ttk
+    TKINTER_AVAILABLE = True
+except ImportError:
+    TKINTER_AVAILABLE = False
+    print("Warning: tkinter not available.")
+
+try:
     from bleak import BleakScanner, BleakClient
     from bleak.backends.device import BLEDevice
     from bleak.backends.scanner import AdvertisementData
@@ -227,8 +235,11 @@ class BluetoothTrayApp:
         self.update_interval = 30  # seconds
         self._update_timer = None
         
-    def create_icon_image(self, connected: int = 0) -> Image.Image:
+    def create_icon_image(self, connected: int = 0):
         """Create a Bluetooth icon with connection indicator."""
+        if not PYSTRAY_AVAILABLE:
+            return None
+            
         size = (64, 64)
         image = Image.new('RGBA', size, (0, 0, 0, 0))
         draw = ImageDraw.Draw(image)
@@ -252,12 +263,14 @@ class BluetoothTrayApp:
             
         return image
         
-    def on_show_menu(self, icon: Icon, item: MenuItem):
+    def on_show_menu(self, icon, item):
         """Show the main menu."""
         pass
         
-    def build_menu(self) -> Menu:
+    def build_menu(self):
         """Build the tray icon menu."""
+        if not PYSTRAY_AVAILABLE:
+            return None
         return Menu(
             MenuItem('📡 Scan for Devices', self.on_scan),
             MenuItem('─' * 20, enabled=False),
@@ -270,7 +283,7 @@ class BluetoothTrayApp:
             MenuItem('❌ Exit', self.on_exit)
         )
         
-    def on_scan(self, icon: Icon, item: MenuItem):
+    def on_scan(self, icon, item):
         """Handle scan action."""
         def scan_thread():
             self.bt_manager.scan_devices(
@@ -286,8 +299,10 @@ class BluetoothTrayApp:
         thread = threading.Thread(target=scan_thread, daemon=True)
         thread.start()
         
-    def on_device_list(self, icon: Icon, item: MenuItem):
+    def on_device_list(self, icon, item):
         """Show device list in a popup or log."""
+        if not PYSTRAY_AVAILABLE:
+            return
         devices = self.bt_manager.get_device_list()
         message = "Bluetooth Devices:\n\n"
         
@@ -305,8 +320,10 @@ class BluetoothTrayApp:
         # Show notification
         icon.notify(message, "Device List")
         
-    def on_check_batteries(self, icon: Icon, item: MenuItem):
+    def on_check_batteries(self, icon, item):
         """Check battery levels of connected devices."""
+        if not PYSTRAY_AVAILABLE:
+            return
         def check_thread():
             for address, device in self.bt_manager.devices.items():
                 if device["connected"]:
@@ -321,12 +338,16 @@ class BluetoothTrayApp:
         thread.start()
         icon.notify("Checking battery levels...", "Battery Check")
         
-    def on_settings(self, icon: Icon, item: MenuItem):
+    def on_settings(self, icon, item):
         """Open settings dialog."""
+        if not PYSTRAY_AVAILABLE:
+            return
         icon.notify("Settings:\n- Auto-refresh: 30s\n- Scan duration: 5s", "Settings")
         
-    def on_about(self, icon: Icon, item: MenuItem):
+    def on_about(self, icon, item):
         """Show about dialog."""
+        if not PYSTRAY_AVAILABLE:
+            return
         icon.notify(
             "Bluetooth Manager v1.0\n\n"
             "Modern Bluetooth device manager\n"
@@ -339,13 +360,13 @@ class BluetoothTrayApp:
             "About"
         )
         
-    def on_exit(self, icon: Icon, item: MenuItem):
+    def on_exit(self, icon, item):
         """Exit the application."""
         self.bt_manager.stop_scan()
         self.bt_manager.stop_async_loop()
         icon.stop()
         
-    def on_clicked(self, icon: Icon, item: MenuItem):
+    def on_clicked(self, icon, item):
         """Handle icon click."""
         # Show device list on left click
         self.on_device_list(icon, item)
@@ -384,9 +405,10 @@ class ModernWindow:
         
     def create_window(self):
         """Create the main window."""
-        import tkinter as tk
-        from tkinter import ttk
-        
+        if not TKINTER_AVAILABLE:
+            print("tkinter not available. Cannot create window.")
+            return
+            
         self.window = tk.Tk()
         self.window.title("Bluetooth Manager")
         self.window.geometry("500x600")
@@ -517,8 +539,9 @@ class ModernWindow:
             
     def create_device_card(self, device: Dict[str, Any]):
         """Create a device card widget."""
-        import tkinter as tk
-        
+        if not TKINTER_AVAILABLE:
+            return
+            
         card = tk.Frame(self.device_frame, bg="#3a3a3a", relief=tk.RAISED, borderwidth=1)
         card.pack(fill=tk.X, padx=10, pady=5)
         
@@ -755,9 +778,14 @@ class ModernWindow:
             
     def run(self):
         """Run the window application."""
+        if not TKINTER_AVAILABLE:
+            print("tkinter is not available. Cannot start GUI.")
+            print("Please install tkinter or run in console mode.")
+            return
         self.create_window()
-        self.update_device_list()
-        self.window.mainloop()
+        if self.window:
+            self.update_device_list()
+            self.window.mainloop()
 
 
 def main():
